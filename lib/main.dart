@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
           child: child!,
         );
       },
-      title: 'Domo',
+      title: 'Domo Server',
       debugShowCheckedModeBanner: false,
       initialRoute: 'authPhone',
       routes: getRoutes(),

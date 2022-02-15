@@ -13,9 +13,10 @@ abstract class UserRemoteDataSource {
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   final CollectionReference _reference =
-      FirebaseFirestore.instance.collection('user');
+      FirebaseFirestore.instance.collection('server');
   @override
   Future<bool> createUser({required Map<String, dynamic> data}) async {
+    log("ssssssssss");
     try {
       await _reference.doc("${data['uid']}").set(data);
 
