@@ -1,4 +1,4 @@
-package com.example.domo_server
+package com.domo_server.co
 
 import io.flutter.embedding.android.FlutterActivity
 
