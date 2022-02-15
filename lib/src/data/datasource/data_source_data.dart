@@ -5,3 +5,4 @@ export 'local/local_city_data_source.dart';
 export 'remote/city_data_source_remote.dart';
 export 'local/get_image_from_camera.dart';
 export 'remote/service_data_source.dart';
+export 'remote/category_service_remote.dart';

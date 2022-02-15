@@ -1,4 +1,5 @@
 import 'package:domo_server/src/data/datasource/data_source_data.dart';
+import 'package:domo_server/src/data/repository/category_service_repository_impl.dart';
 import 'package:domo_server/src/data/repository/repository_data.dart';
 import 'package:domo_server/src/presentation/blocs/blocs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,7 +11,6 @@ import 'src/data/repository/remote_city_repo_impl.dart';
 import 'src/domain/repository/repository_domain.dart';
 import 'src/domain/usecase/service_use_case.dart';
 import 'src/domain/usecase/use_case_domain.dart';
-
 
 final locator = GetIt.instance;
 
@@ -34,6 +34,11 @@ Future<void> initLocator() async {
         remoteCityUseCase: locator(),
       ));
 
+  locator.registerFactory(
+    () => UserBloc(
+      categoryServiceUseCase: locator(),
+    ),
+  );
 
 /*
 .......##.......##.##.....##..######..########..######.....###.....######..########
@@ -49,16 +54,15 @@ Future<void> initLocator() async {
       () => AuthUseCaseDomnain(authRepositoryDomain: locator()));
   locator.registerLazySingleton(() =>
       SharedPrefencesUseCase(sharedPreferencesRepositoryDomain: locator()));
+  locator.registerLazySingleton(() => LocalCityUseCase(locator()));
+  locator.registerLazySingleton(() => RemoteCityUseCase(locator()));
   locator.registerLazySingleton(
-      () => LocalCityUseCase( locator()));
+      () => UserUSerCaseDomain(userRepositoryDomain: locator()));
+  locator.registerLazySingleton(() => GetImageFromLocalUseCase(locator()));
   locator.registerLazySingleton(
-      () => RemoteCityUseCase( locator()));
+      () => ServiceUseCase(serviceRepositoryDomanin: locator()));
   locator.registerLazySingleton(
-      () => UserUSerCaseDomain( userRepositoryDomain:  locator()));
-  locator.registerLazySingleton(
-      () => GetImageFromLocalUseCase(   locator()));
-  locator.registerLazySingleton(
-      () => ServiceUseCase(  serviceRepositoryDomanin:  locator()));
+      () => CategoryServiceUseCase(categoryServiceRepositoryDomain:  locator()));
 
 /*
 .......##.......##.########..########.########...#######...######..####.########..#######..########..##....##
@@ -77,13 +81,15 @@ Future<void> initLocator() async {
   locator.registerLazySingleton<UserRepositoryDomain>(
       () => UserRepositoryImpl(userRemoteDataSource: locator()));
   locator.registerLazySingleton<RemoteCityRepoDomain>(
-      () => RemoteCityRepositoryImpl( locator()));
+      () => RemoteCityRepositoryImpl(locator()));
   locator.registerLazySingleton<LocalCityRepositoryDomain>(
-      () => CityRepositoryLocalImpl( locator()));
+      () => CityRepositoryLocalImpl(locator()));
   locator.registerLazySingleton<GetImageFromLocalRepositoryDomain>(
-      () => GetimageFromCameraRepoImpl( locator()));
+      () => GetimageFromCameraRepoImpl(locator()));
   locator.registerLazySingleton<ServiceRepositoryDomanin>(
-      () => ServiceRepositoryImpl( serviceRemoteDataSource:  locator()));
+      () => ServiceRepositoryImpl(serviceRemoteDataSource: locator()));
+  locator.registerLazySingleton<CategoryServiceRepositoryDomain>(
+      () => CategoryServiceRepositoryImpl(categoryServiceRemoteDataSource:  locator()));
 
 /*
 .......##.......##.########.....###....########....###.....######...#######..##.....##.########...######..########......
@@ -101,14 +107,15 @@ Future<void> initLocator() async {
       () => SharedPreferencesLocalDataSourceImpl(sharedPreferences: locator()));
   locator.registerLazySingleton<UserRemoteDataSource>(
       () => UserRemoteDataSourceImpl());
-  locator.registerLazySingleton<CityRemote>(
-      () => CityRemoteImpl());
+  locator.registerLazySingleton<CityRemote>(() => CityRemoteImpl());
   locator.registerLazySingleton<CityLocalDataSource>(
       () => CityLocalDataSourceImpl());
   locator.registerLazySingleton<GetImageFromCameraLocal>(
       () => GetImageFromCameraLocalimpl());
   locator.registerLazySingleton<ServiceRemoteDataSource>(
       () => ServiceRemoteDataSourceImpl());
+  locator.registerLazySingleton<CategoryServiceRemoteDataSource>(
+      () => CategoryServiceRemoteDataSourceImpl());
 
   /*
   .......##.......##.########.##.....##.########.########.########..##....##..#######.

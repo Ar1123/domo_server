@@ -54,7 +54,12 @@ class ProfessionalDataPage extends StatelessWidget {
             _text(text1: 'Agrega las labores que dominas', size: size),
             CustomContainer(
               child: ListTile(
-                onTap: () {},
+                onTap: () {
+                  _showModal(
+                    size: size,
+                    context: context,
+                  );
+                },
                 title: Text(
                   'Seleccionar',
                   style: textStyle(
@@ -100,4 +105,14 @@ class ProfessionalDataPage extends StatelessWidget {
           ),
         ),
       );
+
+  void _showModal({required Size size, required BuildContext context}) =>
+      customShowModalBottonSheet(
+          context: context,
+          child: SizedBox(
+            height: size.height * .5,
+          ),
+          header: SizedBox(
+            height: size.height * .03,
+          ));
 }
