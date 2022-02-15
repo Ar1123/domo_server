@@ -77,7 +77,7 @@ class TabProfilePage extends StatelessWidget {
                     body: TabBarView(
                       children: [
                         PersonalDataPage(),
-                        ProfessionalDataPage(),
+                        ProfessionalDataPage(userBloc: userBloc,),
                       ],
                     ),
                   ),

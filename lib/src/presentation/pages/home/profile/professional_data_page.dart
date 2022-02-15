@@ -1,12 +1,34 @@
 import 'package:domo_server/src/config/style/style.dart';
+import 'package:domo_server/src/domain/entities/category_service_entities.dart';
+import 'package:domo_server/src/presentation/blocs/blocs.dart';
 import 'package:domo_server/src/presentation/widgets/custom_widget/custom.dart';
 import 'package:domo_server/src/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class ProfessionalDataPage extends StatelessWidget {
-  ProfessionalDataPage({Key? key}) : super(key: key);
+class ProfessionalDataPage extends StatefulWidget {
+  const ProfessionalDataPage({Key? key, required this.userBloc})
+      : super(key: key);
+  final UserBloc userBloc;
+
+  @override
+  State<ProfessionalDataPage> createState() => _ProfessionalDataPageState();
+}
+
+class _ProfessionalDataPageState extends State<ProfessionalDataPage> {
   final TextEditingController _experienceYear = TextEditingController();
+
+  List<String> _categories = [];
+  void _addItem(String item) {
+    if (!_categories.contains(item)) {
+      _categories.add(item);
+    }
+  }
+
+  void _deleteItem(String item) {
+    _categories.remove(item);
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -109,8 +131,55 @@ class ProfessionalDataPage extends StatelessWidget {
   void _showModal({required Size size, required BuildContext context}) =>
       customShowModalBottonSheet(
           context: context,
-          child: SizedBox(
-            height: size.height * .5,
+          child: StatefulBuilder(
+            builder: (_, states) => SizedBox(
+              height: size.height * .5,
+              child: FutureBuilder<List<CategoryServiceEntities>>(
+                future: widget.userBloc.getCategoryService(),
+                builder: (_, snapshot) {
+                  if (snapshot.hasData) {
+                    List<CategoryServiceEntities> list = snapshot.data ?? [];
+                    if (list.isNotEmpty) {
+                      return ListView.builder(
+                          itemCount: list.length,
+                          itemBuilder: (_, index) => ListTile(
+                                onTap: () {
+                                  if (_categories
+                                      .contains(list[index].service)) {
+                                    _deleteItem(list[index].service!);
+                                  } else {
+                                    _addItem(list[index].service!);
+                                  }
+                                  setState(() {});
+                                  states(() {});
+                                },
+                                leading:
+                                    (_categories.contains(list[index].service!))
+                                        ? Icon(
+                                            Icons.radio_button_checked_outlined,
+                                            color: colorText,
+                                          )
+                                        : Icon(
+                                            Icons.radio_button_off_outlined,
+                                            color: colorText,
+                                          ),
+                                title: Text(
+                                  list[index].service!,
+                                ),
+                              ));
+                    } else {
+                      return const Center(
+                        child: Text('No hay categorias disponibles :('),
+                      );
+                    }
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
+              ),
+            ),
           ),
           header: SizedBox(
             height: size.height * .03,

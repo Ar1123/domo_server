@@ -16,9 +16,12 @@ class CategoryServiceRemoteDataSourceImpl
   @override
   Future<List<CategoryServiceModel>> getCategoryservice() async {
     try {
+       List<CategoryServiceModel> list =[];
         final result = await _collectionReference.get();
+
+        list  = result.docs.map((e) => CategoryServiceModel.fromJson(e.data() as Map<String, dynamic>)).toList();
         log(jsonEncode(result.docs[0].data()));
-        return [];
+        return list;
 
     } on FirebaseException catch (e) {
       throw ServerExceptions();

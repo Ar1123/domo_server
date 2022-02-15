@@ -7,7 +7,7 @@ import 'dart:convert';
 import 'package:domo_server/src/domain/entities/category_service_entities.dart';
 
 // ignore: non_constant_identifier_names
-CategoryServiceModel CategoryServiceModelFromJson(String str) =>
+CategoryServiceModel CategorrryServiceModelFromJson(String str) =>
     CategoryServiceModel.fromJson(json.decode(str));
 
 // ignore: non_constant_identifier_names
