@@ -97,6 +97,23 @@ class _ProfessionalDataPageState extends State<ProfessionalDataPage> {
               ),
             ),
             SizedBox(
+              height: (_categories.isEmpty) ? 0 : size.height * .1,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _categories.length,
+                  itemBuilder: (_, index) => Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: size.width * .03),
+                        child: Chip(
+                          label: Text(_categories[index]),
+                          onDeleted: () {
+                            _deleteItem(_categories[index]);
+                            setState(() {});
+                          },
+                        ),
+                      )),
+            ),
+            SizedBox(
               height: size.height * .05,
             ),
             ButtonWidget(
@@ -182,6 +199,36 @@ class _ProfessionalDataPageState extends State<ProfessionalDataPage> {
             ),
           ),
           header: SizedBox(
-            height: size.height * .03,
+            // height: size.height * .03,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                GestureDetector(
+                  onTap: (){
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Cancelar',
+                    style: textStyle(
+                      color: colorText,
+                      size: size.height * .03,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: (){
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Ok',
+                    style: textStyle(
+                      color: colorText,
+                      size: size.height * .03,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ));
 }

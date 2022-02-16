@@ -37,6 +37,9 @@ Future<void> initLocator() async {
   locator.registerFactory(
     () => UserBloc(
       categoryServiceUseCase: locator(),
+      authUseCaseDomnain: locator(),
+      uSerCaseDomain:locator(),
+      getImageFromLocalUseCase: locator(),
     ),
   );
 

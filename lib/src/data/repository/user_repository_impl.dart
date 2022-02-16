@@ -1,3 +1,4 @@
+import 'package:cross_file/src/types/interface.dart';
 import 'package:dartz/dartz.dart';
 import 'package:domo_server/src/core/errors/failures.dart';
 import 'package:domo_server/src/core/utils/future_response/future_response.dart';
@@ -29,6 +30,13 @@ class UserRepositoryImpl implements UserRepositoryDomain {
       {required Map<String, dynamic> data, required String id}) async {
     return response(() async {
       return await userRemoteDataSource.update(data: data, id: id);
+    });
+  }
+
+  @override
+  Future<Either<Failure, bool>> addImage({required String file, required String id}) async{
+    return response(()async{
+      return await userRemoteDataSource.addImage(file: file, id: id);
     });
   }
 }

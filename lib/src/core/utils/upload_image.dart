@@ -22,7 +22,7 @@ Future<bool> uploadImage({
       await ref.getDownloadURL().then((value) async {
         await nameCollectio.doc(id).set(
             {
-              name: FieldValue.arrayUnion([value])
+              name:value,
             },
             SetOptions(
               merge: true,

@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:domo_server/src/core/utils/upload_image.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../core/errors/execptions.dart';
 import '../../model/user_model.dart';
@@ -9,6 +11,7 @@ abstract class UserRemoteDataSource {
   Future<bool> createUser({required Map<String, dynamic> data});
   Future<bool> update({required Map<String, dynamic> data, required String id});
   Future<USerModel> get({required String id});
+  Future<bool> addImage({required String file, required String id});
 }
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
@@ -55,5 +58,17 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
       throw ServerExceptions();
     }
+  }
+
+  @override
+  Future<bool> addImage({required String file, required String id}) async{
+      try { 
+
+        await uploadImage(image: XFile(file), id: id, nameCollectio: _reference, name: "img", path: "profile/$id");
+        
+          return true;
+      } on FirebaseException catch (e) {
+        throw ServerExceptions();
+      }
   }
 }
