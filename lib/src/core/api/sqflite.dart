@@ -23,7 +23,7 @@ class Sqflite {
   initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
 
-    final path = join(documentsDirectory.path, 'DomoDB.db');
+    final path = join(documentsDirectory.path, 'DomoDBServer.db');
 
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {

@@ -9,6 +9,12 @@ class UserEntities implements Equatable {
   final String? phone;
   final String? typeIde;
   final String? ide;
+  final String? img;
+  final String? biography;
+  final List<String>? labores;
+  final String? city;
+  final String? dep;
+  final String? experienceYear;
 
   UserEntities({
     this.accountComplete,
@@ -19,6 +25,12 @@ class UserEntities implements Equatable {
     this.name,
     this.phone,
     this.typeIde,
+    this.img,
+    this.biography,
+    this.labores,
+    this.city,
+    this.dep,
+    this.experienceYear,
   });
 
   @override
@@ -31,6 +43,12 @@ class UserEntities implements Equatable {
         name,
         phone,
         typeIde,
+        img,
+        biography,
+        labores,
+        city,
+        dep,
+        experienceYear,
       ];
 
   @override

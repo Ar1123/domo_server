@@ -40,6 +40,7 @@ Future<void> initLocator() async {
       authUseCaseDomnain: locator(),
       uSerCaseDomain:locator(),
       getImageFromLocalUseCase: locator(),
+      localCityUseCase: locator(),
     ),
   );
 
