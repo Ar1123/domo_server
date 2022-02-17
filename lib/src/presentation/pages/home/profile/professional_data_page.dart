@@ -237,7 +237,7 @@ class _ProfessionalDataPageState extends State<ProfessionalDataPage> {
             // height: size.height * .03,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
+              children: [ 
                 GestureDetector(
                   onTap: () {
                     Navigator.pop(context);

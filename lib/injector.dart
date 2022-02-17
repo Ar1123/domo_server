@@ -43,6 +43,9 @@ Future<void> initLocator() async {
       localCityUseCase: locator(),
     ),
   );
+  locator.registerFactory(() => ServiceBloc(
+    serviceUseCase: locator(),
+  ));
 
 /*
 .......##.......##.##.....##..######..########..######.....###.....######..########

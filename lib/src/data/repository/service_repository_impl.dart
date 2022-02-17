@@ -10,31 +10,12 @@ class ServiceRepositoryImpl implements ServiceRepositoryDomanin {
   final ServiceRemoteDataSource serviceRemoteDataSource;
 
   ServiceRepositoryImpl({required this.serviceRemoteDataSource});
-  @override
-  Future<Either<Failure, bool>> createService({
-    required Map<String, dynamic> data,
-    required List<String> file,
-  }) async {
-    return response(() async {
-      return await serviceRemoteDataSource.createService(
-        data: data,
-        file: file,
-      );
-    });
-  }
-
-  @override
-  Future<Either<Failure, List>> getAllService() async {
-    return response(() async {
-      return await serviceRemoteDataSource.getAllService();
-    });
-  }
-
+ 
   @override
   Future<Either<Failure, List<ServiceModel>>> getServiceById(
-      {required String id}) {
+      {required Map<String, dynamic> data}) {
     return response(() async {
-      return await serviceRemoteDataSource.getServiceById(id: id);
+      return await serviceRemoteDataSource.getServiceById(data: data);
     });
   }
 }

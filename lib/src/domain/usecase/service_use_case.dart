@@ -9,11 +9,8 @@ class ServiceUseCase {
 
   ServiceUseCase({required this.serviceRepositoryDomanin});
 
-  Future<Either<Failure, bool>> createService(
-          {required Map<String, dynamic> data, required List<String> file}) =>
-      serviceRepositoryDomanin.createService(data: data, file: file);
-  Future<Either<Failure, List<ServiceEntities>>> getServiceById({required String id}) =>
-      serviceRepositoryDomanin.getServiceById(id: id);
-  Future<Either<Failure, List<dynamic>>> getAllService() =>
-      serviceRepositoryDomanin.getAllService();
+
+  Future<Either<Failure, List<ServiceEntities>>> getServiceById({required Map<String, dynamic> data}) =>
+      serviceRepositoryDomanin.getServiceById(data: data);
+  
 }
