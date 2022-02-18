@@ -4,5 +4,6 @@ getRoutes() => {
       'authPhone': (_) => AuthPhonePage(),
       // 'selectUserType': (_) => SelectUserType(),
       'homePage':(_)=>HomePage(),
-      'profilePage':(_)=>TabProfilePage()
+      'profilePage':(_)=>TabProfilePage(),
+      'detailService':(_)=>DetailService(),
     };

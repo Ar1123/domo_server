@@ -118,7 +118,7 @@ class _TabHomePageState extends State<TabHomePage> {
                                         );
                                       } else {
                                         return SizedBox(
-                                          height: size.height*.8,
+                                          height: size.height * .8,
                                           child: const Center(
                                             child: Text(
                                                 'No hay servicios disponibles'),
@@ -152,35 +152,43 @@ class _TabHomePageState extends State<TabHomePage> {
 
   Widget _container(
           {required Size size, required ServiceEntities serviceEntities}) =>
-      Container(
-        height: size.height * .2,
-        width: size.width,
-        margin: EdgeInsets.symmetric(
-            horizontal: size.width * .05, vertical: size.height * .03),
-        decoration: BoxDecoration(
-            color: backGroundColor,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: colorText,
-                offset: const Offset(0, 2),
-                blurRadius: 2,
-              )
-            ]),
-        child: Column(
-          children: [
-            SizedBox(
-              height: size.height * .04,
-            ),
-            _itemCard(
-                text1: 'Ciudad:',
-                text2: '${serviceEntities.city} (${serviceEntities.dep})',
-                size: size),
-            _itemCard(
-                text1: 'Fecha:', text2: '${serviceEntities.date}', size: size),
-            _itemCard(
-                text1: 'Hora:', text2: '${serviceEntities.hour}', size: size),
-          ],
+      GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, "detailService",
+              arguments: {"service": serviceEntities});
+        },
+        child: Container(
+          height: size.height * .2,
+          width: size.width,
+          margin: EdgeInsets.symmetric(
+              horizontal: size.width * .05, vertical: size.height * .03),
+          decoration: BoxDecoration(
+              color: backGroundColor,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: colorText,
+                  offset: const Offset(0, 2),
+                  blurRadius: 2,
+                )
+              ]),
+          child: Column(
+            children: [
+              SizedBox(
+                height: size.height * .04,
+              ),
+              _itemCard(
+                  text1: 'Ciudad:',
+                  text2: '${serviceEntities.city} (${serviceEntities.dep})',
+                  size: size),
+              _itemCard(
+                  text1: 'Fecha:',
+                  text2: '${serviceEntities.date}',
+                  size: size),
+              _itemCard(
+                  text1: 'Hora:', text2: '${serviceEntities.hour}', size: size),
+            ],
+          ),
         ),
       );
   Widget _itemCard(

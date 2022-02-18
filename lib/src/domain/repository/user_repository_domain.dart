@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:domo_server/src/core/errors/failures.dart';
 import 'package:domo_server/src/domain/entities/user_entities.dart';
-import 'package:image_picker/image_picker.dart';
 
 abstract class UserRepositoryDomain{
 
