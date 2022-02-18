@@ -1,4 +1,7 @@
 import 'package:domo_server/src/config/style/style.dart';
+import 'package:domo_server/src/presentation/pages/home/tab_offert/tabs/active.dart';
+import 'package:domo_server/src/presentation/pages/home/tab_offert/tabs/history.dart';
+import 'package:domo_server/src/presentation/pages/home/tab_offert/tabs/offered.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -75,10 +78,10 @@ class _TabOfferPageState extends State<TabOfferPage>
           ),
           body: TabBarView(
             controller: _tabController,
-            children: [
-              Text('1'),
-              Text('2'),
-              Text('3'),
+            children: const [
+              ActivePage(),
+              OfferedPage(),
+              HistoryPage()              
             ],
           ),
         ),

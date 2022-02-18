@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,10 +26,14 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
 
   @override
   Future<dynamic> getOfferById({required String id}) async {
-    final result = await _reference.where("id", isEqualTo: id).get();
+    try {
+      final result = await _reference.where("owner", isEqualTo: id).get();
 
-    // log(json)
+      log(jsonEncode(result.docs[0].data()));
 
-    return [];
+      return [];
+    } catch (e) {
+      throw ServerExceptions();
+    }
   }
 }

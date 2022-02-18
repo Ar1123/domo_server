@@ -203,14 +203,12 @@ class _TabHomePageState extends State<TabHomePage> {
               style: textStyle(color: colorText, size: size.height * .024),
             ),
           ),
-          Container(
-            child: Text(
-              text2,
-              style: textStyle(
-                color: colorText,
-                size: size.height * .024,
-                fontWeight: FontWeight.normal,
-              ),
+          Text(
+            text2,
+            style: textStyle(
+              color: colorText,
+              size: size.height * .024,
+              fontWeight: FontWeight.normal,
             ),
           ),
         ],

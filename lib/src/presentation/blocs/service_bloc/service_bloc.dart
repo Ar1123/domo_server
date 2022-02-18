@@ -21,6 +21,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
     required this.offerUseCase,
   }) : super(ServiceInitial()) {
     on<ServiceEvent>((event, emit) {});
+    getOffer();
   }
 
   final StreamController<List<ServiceEntities>> _streamService =
@@ -62,5 +63,11 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
       status = r;
     });
     return status;
+  }
+
+  Future<dynamic> getOffer()async{
+
+      await offerUseCase.getOfferById(id:  await userBloc.getIdUSer()); 
+    return [];
   }
 }
