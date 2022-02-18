@@ -1,6 +1,7 @@
-import 'package:domo_server/src/config/style/style.dart';
-import 'package:domo_server/src/domain/entities/service_entities.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../../config/style/style.dart';
+import '../../../../../domain/entities/offer_entities.dart';
 
 
 class OfferedPage extends StatelessWidget {
@@ -14,7 +15,7 @@ class OfferedPage extends StatelessWidget {
     );
   }
   Widget _container(
-          {required Size size, required dynamic serviceEntities, required BuildContext context}) =>
+          {required Size size, required OfferEntities serviceEntities, required BuildContext context}) =>
       GestureDetector(
         onTap: () {
           Navigator.pushNamed(context, "detailService",
@@ -42,14 +43,14 @@ class OfferedPage extends StatelessWidget {
               ),
               _itemCard(
                   text1: 'Ciudad:',
-                  text2: '${serviceEntities.city} (${serviceEntities.dep})',
+                  text2: '${serviceEntities.service!.city} (${serviceEntities.service!.dep})',
                   size: size),
               _itemCard(
                   text1: 'Fecha:',
-                  text2: '${serviceEntities.date}',
+                  text2: '${serviceEntities.service!.date}',
                   size: size),
               _itemCard(
-                  text1: 'Hora:', text2: '${serviceEntities.hour}', size: size),
+                  text1: 'Hora:', text2: '${serviceEntities.service!.hour}', size: size),
             ],
           ),
         ),

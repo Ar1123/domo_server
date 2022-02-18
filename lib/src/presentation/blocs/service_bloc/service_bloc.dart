@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:domo_server/src/domain/entities/offer_entities.dart';
 import 'package:domo_server/src/presentation/blocs/blocs.dart';
 import 'package:equatable/equatable.dart';
 
@@ -21,11 +22,13 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
     required this.offerUseCase,
   }) : super(ServiceInitial()) {
     on<ServiceEvent>((event, emit) {});
-    getOffer();
   }
 
   final StreamController<List<ServiceEntities>> _streamService =
       StreamController<List<ServiceEntities>>.broadcast();
+
+  final StreamController<List<OfferEntities>> _streamOffer =
+      StreamController<List<OfferEntities>>.broadcast();
 
   Stream<List<ServiceEntities>> get streamService => _streamService.stream;
 
@@ -65,9 +68,29 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
     return status;
   }
 
-  Future<dynamic> getOffer()async{
+  Future<List<OfferEntities>> getOffer({required Status status})async{
+List<OfferEntities> list = [];
+     final result = await offerUseCase.getOfferById(id:  await userBloc.getIdUSer()); 
 
-      await offerUseCase.getOfferById(id:  await userBloc.getIdUSer()); 
-    return [];
+     result.fold((l) {}, (r) {
+
+        if(status==Status.offered){
+
+          r.forEach((element) { 
+            if(!element.acept! && element.status! ){
+
+              list.add(element);
+            }
+          });
+        }
+     });
+    return list;
   }
+
 }
+enum Status {
+  active,
+  offered,
+  history,
+}
+

@@ -1,13 +1,11 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:domo_server/src/core/errors/execptions.dart';
+import '../../../core/errors/execptions.dart';
+import '../../model/offer_model.dart';
 
 abstract class OfferRemoteDataSource {
   Future<bool> createOffer(
       {required Map<String, dynamic> data, required String id});
-  Future<dynamic> getOfferById({required String id});
+  Future<List<OfferModel>> getOfferById({required String id});
 }
 
 class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
@@ -25,13 +23,15 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
   }
 
   @override
-  Future<dynamic> getOfferById({required String id}) async {
+  Future<List<OfferModel>> getOfferById({required String id}) async {
     try {
+      List<OfferModel> list = [];
       final result = await _reference.where("owner", isEqualTo: id).get();
+      list = result.docs
+          .map((e) => OfferModel.fromJson(e.data() as Map<String, dynamic>))
+          .toList();
 
-      log(jsonEncode(result.docs[0].data()));
-
-      return [];
+      return list;
     } catch (e) {
       throw ServerExceptions();
     }

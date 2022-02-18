@@ -1,6 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:domo_server/src/core/errors/failures.dart';
-import 'package:domo_server/src/domain/repository/repository_domain.dart';
+
+import '../../core/errors/failures.dart';
+import '../entities/offer_entities.dart';
+import '../repository/repository_domain.dart';
 
 class OfferUseCase {
 
@@ -10,5 +12,5 @@ class OfferUseCase {
   OfferUseCase({required this.offerRepositoryDomain});
 
   Future<Either<Failure, bool>> createOffer({required Map<String, dynamic> data, required String id})=>offerRepositoryDomain.createOffer(data: data, id: id);
-  Future<Either<Failure, dynamic>> getOfferById({ required String id})=>offerRepositoryDomain.getOfferById(id: id);
+  Future<Either<Failure, List<OfferEntities>>> getOfferById({ required String id})=>offerRepositoryDomain.getOfferById(id: id);
 }
