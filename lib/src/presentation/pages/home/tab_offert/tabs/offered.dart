@@ -1,25 +1,53 @@
+import 'package:domo_server/src/presentation/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../../injector.dart';
 import '../../../../../config/style/style.dart';
 import '../../../../../domain/entities/offer_entities.dart';
 
-
 class OfferedPage extends StatelessWidget {
-  const OfferedPage({ Key? key }) : super(key: key);
+  OfferedPage({Key? key}) : super(key: key);
+
+  final serviceBloc = locator<ServiceBloc>();
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Container(
-      
+    return SizedBox(
+      child: FutureBuilder<List<OfferEntities>>(
+        future: serviceBloc.getOffer(status: Status.offered),
+        builder: (_, snapshot) {
+          if (snapshot.hasData) {
+            List<OfferEntities> list = snapshot.data ?? [];
+            if (list.isNotEmpty) {
+              return ListView.builder(
+                itemCount: list.length,
+                itemBuilder: (_, index) => _container(
+                    size: size, serviceEntities: list[index], context: context),
+              );
+            } else {
+              return const Center(
+                child: Text('Si ofertas'),
+              );
+            }
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
     );
   }
+
   Widget _container(
-          {required Size size, required OfferEntities serviceEntities, required BuildContext context}) =>
+          {required Size size,
+          required OfferEntities serviceEntities,
+          required BuildContext context}) =>
       GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, "detailService",
-              arguments: {"service": serviceEntities});
+          // Navigator.pushNamed(context, "detailService",
+          //     arguments: {"service": serviceEntities});
         },
         child: Container(
           height: size.height * .2,
@@ -43,14 +71,17 @@ class OfferedPage extends StatelessWidget {
               ),
               _itemCard(
                   text1: 'Ciudad:',
-                  text2: '${serviceEntities.service!.city} (${serviceEntities.service!.dep})',
+                  text2:
+                      '${serviceEntities.service!.city} (${serviceEntities.service!.dep})',
                   size: size),
               _itemCard(
                   text1: 'Fecha:',
                   text2: '${serviceEntities.service!.date}',
                   size: size),
               _itemCard(
-                  text1: 'Hora:', text2: '${serviceEntities.service!.hour}', size: size),
+                  text1: 'Hora:',
+                  text2: '${serviceEntities.service!.hour}',
+                  size: size),
             ],
           ),
         ),
@@ -77,5 +108,4 @@ class OfferedPage extends StatelessWidget {
           ),
         ],
       );
-
 }

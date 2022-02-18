@@ -32,12 +32,40 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
 
   Stream<List<ServiceEntities>> get streamService => _streamService.stream;
 
+  // Future<void> getService({required Map<String, dynamic> data}) async {
+  //   final result = await serviceUseCase.getServiceById(data: data);
+
+  //   result.fold((l) => {}, (r) {
+
+  //       // final getOffer = offerUseCase.getOfferById(id: u)
+
+  //     _streamService.add(r);
+  //   });
+  // }
+
   Future<void> getService({required Map<String, dynamic> data}) async {
+    List<ServiceEntities> listTemv = [];
+    List<ServiceEntities> listTemp = [];
     final result = await serviceUseCase.getServiceById(data: data);
+    final id = await userBloc.getIdUSer();
 
     result.fold((l) => {}, (r) {
-      _streamService.add(r);
+      listTemv = r;
     });
+
+    for (var i = 0; i < listTemv.length; i++) {
+      final getOffer = await offerUseCase.getOfferById(
+        idUser: id,
+        idService: listTemv[i].id,
+      );
+      getOffer.fold((l) {}, (r) {
+        if (r.owner == null) {
+          listTemp.add(listTemv[i]);
+        }
+      });
+    }
+
+    _streamService.add(listTemp);
   }
 
   @override
@@ -68,29 +96,26 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
     return status;
   }
 
-  Future<List<OfferEntities>> getOffer({required Status status})async{
-List<OfferEntities> list = [];
-     final result = await offerUseCase.getOfferById(id:  await userBloc.getIdUSer()); 
+  Future<List<OfferEntities>> getOffer({required Status status}) async {
+    List<OfferEntities> list = [];
+    final result =
+        await offerUseCase.getAllOfferById(id: await userBloc.getIdUSer());
 
-     result.fold((l) {}, (r) {
-
-        if(status==Status.offered){
-
-          r.forEach((element) { 
-            if(!element.acept! && element.status! ){
-
-              list.add(element);
-            }
-          });
-        }
-     });
+    result.fold((l) {}, (r) {
+      if (status == Status.offered) {
+        r.forEach((element) {
+          if (!element.acept! && element.status!) {
+            list.add(element);
+          }
+        });
+      }
+    });
     return list;
   }
-
 }
+
 enum Status {
   active,
   offered,
   history,
 }
-

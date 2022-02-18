@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class OfferEntities extends Equatable {
-  OfferEntities({
+  const OfferEntities({
     this.owner,
     this.acept,
     this.service,
@@ -25,10 +25,12 @@ class OfferEntities extends Equatable {
         client,
         status,
       ];
+
+  get dep => null;
 }
 
 class ServiceOffer extends Equatable {
-  ServiceOffer({
+  const ServiceOffer({
     this.date,
     this.imagesevice,
     this.uid,

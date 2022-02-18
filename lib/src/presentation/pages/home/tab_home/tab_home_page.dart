@@ -45,7 +45,11 @@ class _TabHomePageState extends State<TabHomePage> {
                     serviceBloc.getService(data: {
                       "city": snapshot.data!.city,
                       "category": labor
-                    }).then((value) {});
+                    }).then((value) {
+                      setState(() {
+                        
+                      });
+                    });
                   }
                   return Column(
                     children: [

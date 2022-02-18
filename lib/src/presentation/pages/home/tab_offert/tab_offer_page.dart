@@ -78,7 +78,7 @@ class _TabOfferPageState extends State<TabOfferPage>
           ),
           body: TabBarView(
             controller: _tabController,
-            children: const [
+            children:  [
               ActivePage(),
               OfferedPage(),
               HistoryPage()              
