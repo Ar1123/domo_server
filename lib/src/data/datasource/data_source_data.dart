@@ -6,3 +6,4 @@ export 'remote/city_data_source_remote.dart';
 export 'local/get_image_from_camera.dart';
 export 'remote/service_data_source.dart';
 export 'remote/category_service_remote.dart';
+export 'remote/offer_data_sourde.dart';

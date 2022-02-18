@@ -45,6 +45,8 @@ Future<void> initLocator() async {
   );
   locator.registerFactory(() => ServiceBloc(
     serviceUseCase: locator(),
+    offerUseCase: locator(),
+    userBloc: locator(),
   ));
 
 /*
@@ -70,6 +72,8 @@ Future<void> initLocator() async {
       () => ServiceUseCase(serviceRepositoryDomanin: locator()));
   locator.registerLazySingleton(
       () => CategoryServiceUseCase(categoryServiceRepositoryDomain:  locator()));
+  locator.registerLazySingleton(
+      () => OfferUseCase(offerRepositoryDomain:  locator()));
 
 /*
 .......##.......##.########..########.########...#######...######..####.########..#######..########..##....##
@@ -97,6 +101,8 @@ Future<void> initLocator() async {
       () => ServiceRepositoryImpl(serviceRemoteDataSource: locator()));
   locator.registerLazySingleton<CategoryServiceRepositoryDomain>(
       () => CategoryServiceRepositoryImpl(categoryServiceRemoteDataSource:  locator()));
+  locator.registerLazySingleton<OfferRepositoryDomain>(
+      () => OfferRepositoryImpl(offerRemoteDataSource:  locator()));
 
 /*
 .......##.......##.########.....###....########....###.....######...#######..##.....##.########...######..########......
@@ -123,6 +129,8 @@ Future<void> initLocator() async {
       () => ServiceRemoteDataSourceImpl());
   locator.registerLazySingleton<CategoryServiceRemoteDataSource>(
       () => CategoryServiceRemoteDataSourceImpl());
+  locator.registerLazySingleton<OfferRemoteDataSource>(
+      () => OfferRemoteDataSourceImpl());
 
   /*
   .......##.......##.########.##.....##.########.########.########..##....##..#######.

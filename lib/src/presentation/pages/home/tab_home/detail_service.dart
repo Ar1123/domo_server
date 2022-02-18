@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:domo_server/injector.dart';
+import 'package:domo_server/src/presentation/blocs/blocs.dart';
 import 'package:domo_server/src/presentation/widgets/custom_widget/custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,8 +16,10 @@ import '../../../widgets/widgets.dart';
 // ignore: must_be_immutable
 class DetailService extends StatelessWidget {
   DetailService({Key? key}) : super(key: key);
-  ServiceEntities? serviceEntities;
+  ServiceModel? serviceEntities;
   final TextEditingController _priceController = TextEditingController();
+
+  final serviceBloc = locator<ServiceBloc>();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -215,13 +219,20 @@ class DetailService extends StatelessWidget {
                     textEditingController: _priceController,
                   ),
                 ),
-                SizedBox(height: size.height*.07,),
+                SizedBox(
+                  height: size.height * .07,
+                ),
                 ButtonWidget(
                   backGroundColor: colorText,
                   borderColor: colorText,
                   textColor: whiteColor,
                   text: "Enviar oferta",
-                  action: () {},
+                  action: () async {
+                    await serviceBloc.createOffer(data: {
+                      "service": serviceEntities!.toJson(),
+                      "price":_priceController.text.trim(),
+                    });
+                  },
                 ),
               ],
             ),
