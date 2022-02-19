@@ -30,13 +30,17 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
   Future<List<OfferModel>> getAllOfferById({required String id}) async {
     try {
       List<OfferModel> list = [];
+      log(id);
       final result = await _reference.where("owner", isEqualTo: id).get();
+
+      log("${result.docs.length}");
       list = result.docs
           .map((e) => OfferModel.fromJson(e.data() as Map<String, dynamic>))
           .toList();
 
       return list;
     } catch (e) {
+      log("$e");
       throw ServerExceptions();
     }
   }

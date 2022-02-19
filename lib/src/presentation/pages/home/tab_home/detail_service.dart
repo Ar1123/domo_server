@@ -228,10 +228,13 @@ class DetailService extends StatelessWidget {
                   textColor: whiteColor,
                   text: "Enviar oferta",
                   action: () async {
-                    await serviceBloc.createOffer(data: {
-                      "service": serviceEntities!.toJson(),
-                      "price":_priceController.text.trim(),
-                    });
+                    if (_priceController.text.isNotEmpty) {
+                      await serviceBloc.createOffer(data: {
+                        "service": serviceEntities!.toJson(),
+                        "price": _priceController.text.trim(),
+                      });
+                      Navigator.pop(context);
+                    }
                   },
                 ),
               ],

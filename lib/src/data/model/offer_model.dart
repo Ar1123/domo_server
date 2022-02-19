@@ -17,6 +17,7 @@ class OfferModel extends OfferEntities {
     bool? acept,
     Service? service,
     String? price,
+    String? idOffer,
     String? client,
     bool? status,
   }) : super(
@@ -25,12 +26,14 @@ class OfferModel extends OfferEntities {
           owner: owner,
           price: price,
           service: service,
+          idOffer: idOffer,
           status: status,
         );
 
   factory OfferModel.fromJson(Map<String, dynamic> json) => OfferModel(
         owner: json["owner"],
         acept: json["acept"],
+        idOffer: json["idOffer"],
         service: Service.fromJson(json["service"]),
         price: json["price"],
         client: json["client"],
@@ -44,11 +47,12 @@ class OfferModel extends OfferEntities {
         "price": price,
         "client": client,
         "status": status,
+        "idOffer": idOffer,
       };
 }
 
 class Service extends ServiceOffer {
-  Service({
+  const Service({
     String? date,
     List<String>? imagesevice,
     String? uid,

@@ -47,7 +47,7 @@ class TabSearchPage extends StatelessWidget {
         decoration: BoxDecoration(color: backGroundColor, boxShadow: [
           BoxShadow(
             color: colorText,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
             blurRadius: 3,
           )
         ]),

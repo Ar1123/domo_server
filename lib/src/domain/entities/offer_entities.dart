@@ -8,6 +8,7 @@ class OfferEntities extends Equatable {
     this.price,
     this.client,
     this.status,
+    this.idOffer,
   });
 
   final String? owner;
@@ -15,6 +16,7 @@ class OfferEntities extends Equatable {
   final ServiceOffer? service;
   final String? price;
   final String? client;
+  final String? idOffer;
   final bool? status;
   @override
   List<Object?> get props => [
@@ -24,6 +26,7 @@ class OfferEntities extends Equatable {
         price,
         client,
         status,
+        idOffer,
       ];
 
   get dep => null;

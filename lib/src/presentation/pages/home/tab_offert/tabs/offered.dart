@@ -27,7 +27,7 @@ class OfferedPage extends StatelessWidget {
               );
             } else {
               return const Center(
-                child: Text('Si ofertas'),
+                child: Text('Sin ofertas'),
               );
             }
           } else {

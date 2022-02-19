@@ -83,11 +83,13 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
         DateTime.now().day.toString();
     final service = {
       "service": data['service'],
-      "owner": await userBloc.getIdUSer(),
+      "owner": "${int.parse(idOffer)+12}",
       "client": data['service']["uid"],
+      "idService": data['service']["id"],
       "price": data['price'],
       "status": true,
       "acept": false,
+      "idOffer":idOffer,
     };
     final result = await offerUseCase.createOffer(data: service, id: idOffer);
     result.fold((l) {}, (r) {
@@ -108,6 +110,13 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
             list.add(element);
           }
         });
+      }
+      if(status == Status.active){
+            r.forEach((element) {
+          if (element.acept! && !element.status!) {
+            list.add(element);
+          }
+        });  
       }
     });
     return list;
