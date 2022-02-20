@@ -7,3 +7,4 @@ export 'get_image_camera_repo.dart';
 export 'service_repository_domain.dart';
 export 'category_service_repository.dart';
 export 'offerr_repository_domain.dart';
+export 'notification_repository.dart';

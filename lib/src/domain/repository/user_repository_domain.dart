@@ -9,4 +9,5 @@ abstract class UserRepositoryDomain{
   Future<Either<Failure, bool>> updateUser({required Map<String, dynamic> data, required String id});
   Future<Either<Failure, UserEntities>>  getUser({required String id});
   Future<Either<Failure, bool>> addImage({required String file, required String id});
+  Future<Either<Failure, String>> getToken({required String id});
 } 

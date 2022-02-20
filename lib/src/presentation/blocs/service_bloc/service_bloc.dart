@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:domo_server/src/domain/entities/offer_entities.dart';
@@ -16,10 +17,12 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
   final ServiceUseCase serviceUseCase;
   final OfferUseCase offerUseCase;
   final UserBloc userBloc;
+  final NotificationUseCase notificationUseCase;
   ServiceBloc({
     required this.serviceUseCase,
     required this.userBloc,
     required this.offerUseCase,
+    required this.notificationUseCase,
   }) : super(ServiceInitial()) {
     on<ServiceEvent>((event, emit) {});
   }
@@ -83,17 +86,29 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
         DateTime.now().day.toString();
     final service = {
       "service": data['service'],
-      "owner": "${int.parse(idOffer)+12}",
+      "owner": "${int.parse(idOffer) + 12}",
       "client": data['service']["uid"],
       "idService": data['service']["id"],
       "price": data['price'],
       "status": true,
       "acept": false,
-      "idOffer":idOffer,
+      "idOffer": idOffer,
     };
     final result = await offerUseCase.createOffer(data: service, id: idOffer);
-    result.fold((l) {}, (r) {
+    result.fold((l) {}, (r) async {
       status = r;
+
+      final getTogetoken = await userBloc.getToken(id: data['service']['uid']);
+
+      notificationUseCase.sendNotification(
+        body: {
+          "mesg": "FFFFFF",
+        },
+        token: getTogetoken,
+        title: "Nueva oferta",
+      ).then((value) {
+        log("$value");
+      });
     });
     return status;
   }
@@ -111,12 +126,12 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
           }
         });
       }
-      if(status == Status.active){
-            r.forEach((element) {
+      if (status == Status.active) {
+        r.forEach((element) {
           if (element.acept! && !element.status!) {
             list.add(element);
           }
-        });  
+        });
       }
     });
     return list;

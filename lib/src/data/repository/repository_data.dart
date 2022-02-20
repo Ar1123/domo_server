@@ -5,3 +5,5 @@ export 'service_repository_impl.dart';
 export 'shared_preferences_repository_impl.dart';
 export 'user_repository_impl.dart';
 export 'offer_repository_impl.dart';
+export 'category_service_repository_impl.dart';
+export 'notification_repository_impl.dart';

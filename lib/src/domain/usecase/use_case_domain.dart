@@ -6,3 +6,4 @@ export 'remote_city_use.dart';
 export 'get_image_from_local.dart';
 export 'category_service_use_case.dart';
 export 'offer_use_case.dart';
+export 'notification_use_case.dart';

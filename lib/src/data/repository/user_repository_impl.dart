@@ -39,4 +39,12 @@ class UserRepositoryImpl implements UserRepositoryDomain {
       return await userRemoteDataSource.addImage(file: file, id: id);
     });
   }
+
+  @override
+  Future<Either<Failure, String>> getToken({required String id}) async{
+
+    return response(()async{
+     return await userRemoteDataSource.getToken(id: id);
+    });
+  }
 }

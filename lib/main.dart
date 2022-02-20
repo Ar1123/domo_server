@@ -1,5 +1,6 @@
 import 'package:domo_server/injector.dart';
 import 'package:domo_server/src/config/routes/routes.dart';
+import 'package:domo_server/src/domain/usecase/use_case_domain.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +13,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   await initLocator();
+  locator<NotificationUseCase>();
   runApp(MyApp());
 }
 

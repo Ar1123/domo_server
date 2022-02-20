@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:domo_server/src/core/errors/failures.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../entities/user_entities.dart';
 import '../repository/repository_domain.dart';
@@ -23,4 +22,6 @@ class UserUSerCaseDomain {
   Future<Either<Failure, bool>> addImage(
           {required String file, required String id}) =>
       userRepositoryDomain.addImage(file: file, id: id);
+        Future<Either<Failure, String>> getToken({required String id})=>userRepositoryDomain.getToken(id: id);
+
 }

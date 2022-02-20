@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,11 +13,14 @@ abstract class UserRemoteDataSource {
   Future<bool> update({required Map<String, dynamic> data, required String id});
   Future<USerModel> get({required String id});
   Future<bool> addImage({required String file, required String id});
+  Future<String> getToken({required String id});
 }
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   final CollectionReference _reference =
       FirebaseFirestore.instance.collection('server');
+  final CollectionReference _ref =
+      FirebaseFirestore.instance.collection('token');
   @override
   Future<bool> createUser({required Map<String, dynamic> data}) async {
     log("ssssssssss");
@@ -37,7 +41,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       final user = await _reference.doc(id).get();
       if (user.exists) {
         uSerModel = USerModel.fromJson(user.data() as Map<String, dynamic>);
-      }else{
+      } else {
         uSerModel = USerModel.fromJson({});
       }
       return uSerModel;
@@ -61,14 +65,34 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   }
 
   @override
-  Future<bool> addImage({required String file, required String id}) async{
-      try { 
+  Future<bool> addImage({required String file, required String id}) async {
+    try {
+      await uploadImage(
+          image: XFile(file),
+          id: id,
+          nameCollectio: _reference,
+          name: "img",
+          path: "profile/$id");
 
-        await uploadImage(image: XFile(file), id: id, nameCollectio: _reference, name: "img", path: "profile/$id");
-        
-          return true;
-      } on FirebaseException catch (e) {
-        throw ServerExceptions();
-      }
+      return true;
+    } on FirebaseException catch (e) {
+      throw ServerExceptions();
+    }
+  }
+
+  @override
+  Future<String> getToken({required String id}) async {
+      String token = "";
+    try {
+      log("$id   ${token}" , name: "aaaaaaaaaaaaa");
+      final getToken = await _ref.doc(id).get();
+      final encodeData = (jsonEncode(getToken.data()));
+      final decodeData = (jsonDecode(encodeData));
+      token = decodeData['token'];
+      return token;
+    } on FirebaseException catch (e) {
+      log("$e");
+      throw ServerExceptions();
+    }
   }
 }
