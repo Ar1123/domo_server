@@ -13,7 +13,8 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   await initLocator();
-  locator<NotificationUseCase>();
+ final d = locator<NotificationUseCase>();
+ await d.init();
   runApp(MyApp());
 }
 

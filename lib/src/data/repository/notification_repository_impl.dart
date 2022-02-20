@@ -16,12 +16,14 @@ class NotificationRepositoryImpl implements NotificationRepositoryDomain {
 
   @override
   Future<bool> sendNotification(
-          {required Map<String, dynamic> body,
+          {required String message ,
           required String token,
           required String title}) =>
       firebaseNotificationRemote.sendNotification(
-        body: body,
+        message: message,
         token: token,
         title: title,
       );
+        @override
+  Future<void> init() =>firebaseNotificationRemote.init();
 }

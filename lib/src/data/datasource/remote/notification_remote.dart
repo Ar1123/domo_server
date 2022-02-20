@@ -13,9 +13,11 @@ abstract class NotificationRemoteDataSource {
   Stream<dynamic> foreGround();
   Stream<dynamic> backGround();
   Stream<dynamic> terminated();
+  Future<void> init();
+
 
   Future<bool> sendNotification(
-      {required Map<String, dynamic> body,
+      {required String message,
       required String token,
       required String title});
 }
@@ -30,10 +32,11 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
       FirebaseFirestore.instance.collection("token");
 
   NotificationRemoteDataSourceImpl(this.firebaseMessaging) {
-    init();
   }
 
-  init() async {
+  @override
+  Future<void> init() async{
+   
     await firebaseMessaging.requestPermission(
         alert: true,
         announcement: false,
@@ -47,40 +50,41 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
     final getToken = await sharedPreferences.getKeyString(key: "token");
 
     getToken.fold((l) {
-      sharedPreferences.setKeyString(key: "token", value: token!).then((value) {
-        authUseCaseDomnain.getUserId().then((value) {
-          value.fold((l) {}, (r) {
+      log("11111111111111111");
+      authUseCaseDomnain.getUserId().then((value) {
+        value.fold((l) {
+          log("122222222222222222");
+        }, (r) {
+          log("33333333333333333");
+          if (r.isNotEmpty) {
             _ref.doc(r).set({
               "userId": r,
               "token": token,
             }).then((value) {
-              log("aaaa");
-            }).catchError((e) {
-              log(e, name: "Error");
+              log("wwwwwwwwwwwww");
+              sharedPreferences.setKeyString(key: "token", value: token!);
+            }).catchError((e){
+              log("gggggggggggggg");
             });
-          });
+          }
         });
       });
     }, (r) {
-      if (r.isEmpty || r != token) {
-        sharedPreferences
-            .setKeyString(key: "token", value: token!)
-            .then((value) {
-          authUseCaseDomnain.getUserId().then((value) {
-            value.fold((l) {}, (r) {
-              _ref.doc(r).set({
-                "userId": r,
-                "token": token,
-              }).then((value) {
-                log("aaaa");
-              }).catchError((e) {
-                log(e, name: "Error");
-              });
+      authUseCaseDomnain.getUserId().then((value) {
+        value.fold((l) {}, (r) {
+          if (r.isNotEmpty) {
+            _ref.doc(r).set({
+              "userId": r,
+              "token": token,
+            }).then((value) {
+              sharedPreferences.setKeyString(key: "token", value: token!);
             });
-          });
+          }
         });
-      } else {}
+      });
     });
+
+ 
     log(token!);
     try {
       FirebaseMessaging?.onBackgroundMessage(_background);
@@ -88,7 +92,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
       FirebaseMessaging.onMessageOpenedApp.listen(abirMessage);
     } on FirebaseException catch (e) {
       Future.error('Error $e');
-    }
+  }
   }
 
   static Future<void> _background(RemoteMessage message) async {
@@ -142,7 +146,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
 
   @override
   Future<bool> sendNotification(
-      {required Map<String, dynamic> body,
+      {required String  message,
       required String token,
       required String title}) async {
     final dio = Dio();
@@ -156,7 +160,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
         'priority': 'high',
         'notification': {
           'title': title,
-          'body': body,
+          'body': message,
         }
       };
       final sendMessage = await http.post(Uri.parse(url),

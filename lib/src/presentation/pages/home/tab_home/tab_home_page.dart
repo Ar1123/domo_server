@@ -41,7 +41,7 @@ class _TabHomePageState extends State<TabHomePage> {
                   labores = snapshot.data!.labores!;
                   if (lleno) {
                     lleno = false;
-                    labor = labores[0];
+                    labor = (labores.isEmpty)?'':labores[0];
                     serviceBloc.getService(data: {
                       "city": snapshot.data!.city,
                       "category": labor

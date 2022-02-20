@@ -86,7 +86,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
         DateTime.now().day.toString();
     final service = {
       "service": data['service'],
-      "owner": "${int.parse(idOffer) + 12}",
+      "owner": await userBloc.getIdUSer(),
       "client": data['service']["uid"],
       "idService": data['service']["id"],
       "price": data['price'],
@@ -101,14 +101,13 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
       final getTogetoken = await userBloc.getToken(id: data['service']['uid']);
 
       notificationUseCase.sendNotification(
-        body: {
-          "mesg": "FFFFFF",
-        },
+        message: "Oh!, alguien ha ofertado a tu servico, ven y miremos",
         token: getTogetoken,
         title: "Nueva oferta",
       ).then((value) {
         log("$value");
       });
+    log("$getTogetoken", name: "Token");
     });
     return status;
   }

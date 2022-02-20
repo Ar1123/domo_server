@@ -8,6 +8,8 @@ import 'package:domo_server/src/domain/usecase/use_case_domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../../injector.dart';
+
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -110,6 +112,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           result2.fold((l) {
             emit(ErrorInAuthState(message: 'Error a crear cuenta'));
           }, (r) {
+               final d = locator<NotificationUseCase>();
+            d.init().then((value) {});
             emit(NextInAuthState());
             emit(CloseInAuthState());
           });
