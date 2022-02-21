@@ -33,13 +33,11 @@ class ServiceModel extends ServiceEntities {
     status: status,
     uid: uid,
     category: category,
-  
-
   );
 
   factory ServiceModel.fromJson(Map<String, dynamic> json) => ServiceModel(
         date: json["date"],
-        imagesevice: List<String>.from(json["imagesevice"].map((x) => x)),
+        imagesevice:(json["imagesevice"]==null)?[]: List<String>.from(json["imagesevice"].map((x) => x)),
         uid: json["uid"],
         hour: json["hour"],
         city: json["city"],

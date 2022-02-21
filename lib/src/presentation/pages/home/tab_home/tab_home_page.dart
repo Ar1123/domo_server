@@ -19,6 +19,7 @@ class _TabHomePageState extends State<TabHomePage> {
   int _currentIndex = 0;
   bool lleno = true;
   String labor = "";
+  String city = "";
   List<String> labores = [];
   final serviceBloc = locator<ServiceBloc>();
 
@@ -41,14 +42,13 @@ class _TabHomePageState extends State<TabHomePage> {
                   labores = snapshot.data!.labores!;
                   if (lleno) {
                     lleno = false;
-                    labor = (labores.isEmpty)?'':labores[0];
+                    city = snapshot.data!.city!;
+                    labor = (labores.isEmpty) ? '' : labores[0];
                     serviceBloc.getService(data: {
                       "city": snapshot.data!.city,
                       "category": labor
                     }).then((value) {
-                      setState(() {
-                        
-                      });
+                      setState(() {});
                     });
                   }
                   return Column(
@@ -78,7 +78,6 @@ class _TabHomePageState extends State<TabHomePage> {
                                           "category": labor
                                         }).then((value) {});
                                         setState(() {});
-                                        log(labor);
                                       },
                                       child: Chip(
                                         label: Text(
@@ -109,7 +108,9 @@ class _TabHomePageState extends State<TabHomePage> {
                                       List<ServiceEntities> list =
                                           snapshot.data ?? [];
                                       if (list.isNotEmpty) {
-                                        return SizedBox(
+                                        return Container(
+                                          margin: EdgeInsets.only(
+                                              top: size.height * .03),
                                           height: size.height * .8,
                                           child: ListView.builder(
                                               shrinkWrap: true,
@@ -117,6 +118,7 @@ class _TabHomePageState extends State<TabHomePage> {
                                               itemBuilder: (_, index) =>
                                                   _container(
                                                       size: size,
+                                                      city: city,
                                                       serviceEntities:
                                                           list[index])),
                                         );
@@ -125,7 +127,8 @@ class _TabHomePageState extends State<TabHomePage> {
                                           height: size.height * .8,
                                           child: const Center(
                                             child: Text(
-                                                'No hay servicios disponibles'),
+                                              'No hay servicios disponibles',
+                                            ),
                                           ),
                                         );
                                       }
@@ -155,11 +158,20 @@ class _TabHomePageState extends State<TabHomePage> {
   }
 
   Widget _container(
-          {required Size size, required ServiceEntities serviceEntities}) =>
+          {required Size size,
+          required ServiceEntities serviceEntities,
+          required String city}) =>
       GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, "detailService",
-              arguments: {"service": serviceEntities});
+          Navigator.pushNamed(context, "detailService", arguments: {
+            "service": serviceEntities,
+          }).then((value) {
+            serviceBloc.getService(data: {
+              "city": city,
+              "category": labor,
+            }).then((value) {});
+            setState(() {});
+          });
         },
         child: Container(
           height: size.height * .2,

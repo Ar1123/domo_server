@@ -35,17 +35,6 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
 
   Stream<List<ServiceEntities>> get streamService => _streamService.stream;
 
-  // Future<void> getService({required Map<String, dynamic> data}) async {
-  //   final result = await serviceUseCase.getServiceById(data: data);
-
-  //   result.fold((l) => {}, (r) {
-
-  //       // final getOffer = offerUseCase.getOfferById(id: u)
-
-  //     _streamService.add(r);
-  //   });
-  // }
-
   Future<void> getService({required Map<String, dynamic> data}) async {
     List<ServiceEntities> listTemv = [];
     List<ServiceEntities> listTemp = [];
@@ -59,7 +48,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
     for (var i = 0; i < listTemv.length; i++) {
       final getOffer = await offerUseCase.getOfferById(
         idUser: id,
-        idService: listTemv[i].id,
+        idService: listTemv[i].id!,
       );
       getOffer.fold((l) {}, (r) {
         if (r.owner == null) {
@@ -77,6 +66,15 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
     return super.close();
   }
 
+/*
+.......##.......##..#######..########.########.########.########.
+......##.......##..##.....##.##.......##.......##.......##.....##
+.....##.......##...##.....##.##.......##.......##.......##.....##
+....##.......##....##.....##.######...######...######...########.
+...##.......##.....##.....##.##.......##.......##.......##...##..
+..##.......##......##.....##.##.......##.......##.......##....##.
+.##.......##........#######..##.......##.......########.##.....##
+*/
   Future<bool> createOffer({required Map<String, dynamic> data}) async {
     bool status = false;
     final String idOffer = DateTime.now().millisecondsSinceEpoch.toString() +
@@ -92,6 +90,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
       "price": data['price'],
       "status": true,
       "acept": false,
+      "progress": data['progress'],
       "idOffer": idOffer,
     };
     final result = await offerUseCase.createOffer(data: service, id: idOffer);
@@ -100,14 +99,15 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
 
       final getTogetoken = await userBloc.getToken(id: data['service']['uid']);
 
-      notificationUseCase.sendNotification(
+      notificationUseCase
+          .sendNotification(
         message: "Oh!, alguien ha ofertado a tu servico, ven y miremos",
         token: getTogetoken,
         title: "Nueva oferta",
-      ).then((value) {
+      )
+          .then((value) {
         log("$value");
       });
-    log("$getTogetoken", name: "Token");
     });
     return status;
   }
@@ -119,21 +119,53 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
 
     result.fold((l) {}, (r) {
       if (status == Status.offered) {
-        r.forEach((element) {
+        for (var element in r) {
           if (!element.acept! && element.status!) {
             list.add(element);
           }
-        });
+        }
       }
       if (status == Status.active) {
-        r.forEach((element) {
+        for (var element in r) {
           if (element.acept! && !element.status!) {
             list.add(element);
           }
-        });
+        }
       }
     });
     return list;
+  }
+
+  Future<bool> updateOffer(
+      {required String idOffer,
+      required Map<String, dynamic> data,
+      required Type type,
+      bool progrees = false}) async {
+    bool status = false;
+
+    final result = await offerUseCase.updateOffer(
+        idOffer: idOffer,
+        data: (progrees)
+            ? {"progress": data['progress']}
+            : {"price": data['price']});
+    result.fold((l) {}, (r) async {
+      status = r;
+      final getTogetoken = await userBloc.getToken(id: data['service']['uid']);
+
+      if (type == Type.editPrice) {
+        notificationUseCase
+            .sendNotification(
+          message:
+             (progrees)?'una de tus ofertas, ya esta en progreso.': "hey!, una de tus ofertas a ha sido modificada, ven y dale un vistazo",
+          token: getTogetoken,
+          title: "Oferta modificada",
+        )
+            .then((value) {
+          log("$value");
+        });
+      }
+    });
+    return status;
   }
 }
 
@@ -141,4 +173,8 @@ enum Status {
   active,
   offered,
   history,
+}
+enum Type {
+  delete,
+  editPrice,
 }

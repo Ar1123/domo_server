@@ -46,16 +46,20 @@ class OfferedPage extends StatelessWidget {
           required BuildContext context}) =>
       GestureDetector(
         onTap: () {
-          // Navigator.pushNamed(context, "detailService",
-          //     arguments: {"service": serviceEntities});
+          Navigator.pushNamed(context, "detailService", arguments: {
+            "service": serviceEntities.service,
+            "offer": true,
+            "price": serviceEntities.price,
+            "idOffer":serviceEntities.idOffer,
+          });
         },
         child: Container(
           height: size.height * .2,
           width: size.width,
           margin: EdgeInsets.symmetric(
-              horizontal: size.width * .05, vertical: size.height * .03),
+              horizontal: size.width * .05, vertical: size.height * .01),
           decoration: BoxDecoration(
-              color: backGroundColor,
+              color: blueColorTwo,
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
@@ -67,7 +71,7 @@ class OfferedPage extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                height: size.height * .04,
+                height: size.height * .03,
               ),
               _itemCard(
                   text1: 'Ciudad:',
@@ -82,6 +86,32 @@ class OfferedPage extends StatelessWidget {
                   text1: 'Hora:',
                   text2: '${serviceEntities.service!.hour}',
                   size: size),
+              Container(
+                alignment: Alignment.centerRight,
+                width: size.width,
+                child: Container(
+                  width: size.width * .34,
+                  height: size.height*.0713,
+                  decoration: BoxDecoration(
+                      color: colorText,
+                      borderRadius: const BorderRadius.only(
+                          bottomRight: Radius.circular(10))),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Ofertaste',
+                        style: textStyle(
+                            color: whiteColor, size: size.height * .023),
+                      ),
+                      Text(
+                        serviceEntities.price!,
+                        style: textStyle(
+                            color: whiteColor, size: size.height * .023),
+                      ),
+                    ],
+                  ),
+                ),
+              )
             ],
           ),
         ),

@@ -10,6 +10,9 @@ abstract class OfferRemoteDataSource {
   Future<List<OfferModel>> getAllOfferById({required String id});
   Future<OfferModel> getOfferById(
       {required String idUser, required String idService});
+
+  Future<bool> updateOffer(
+      {required String idOffer, required Map<String, dynamic> data});
 }
 
 class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
@@ -63,6 +66,17 @@ class OfferRemoteDataSourceImpl implements OfferRemoteDataSource {
       }
 
       return offerModel;
+    } on FirebaseException catch (e) {
+      throw ServerExceptions();
+    }
+  }
+
+  @override
+  Future<bool> updateOffer(
+      {required String idOffer, required Map<String, dynamic> data}) async {
+    try {
+      _reference.doc(idOffer).update(data);
+      return true;
     } on FirebaseException catch (e) {
       throw ServerExceptions();
     }

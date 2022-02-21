@@ -19,16 +19,28 @@ class OfferRepositoryImpl implements OfferRepositoryDomain {
   }
 
   @override
-  Future<Either<Failure, List<OfferModel>>> getAllOfferById({required String id}) async {
+  Future<Either<Failure, List<OfferModel>>> getAllOfferById(
+      {required String id}) async {
     return response(() async {
       return await offerRemoteDataSource.getAllOfferById(id: id);
     });
   }
 
   @override
-  Future<Either<Failure, OfferEntities>> getOfferById({required String idUser, required String idService}) {
-   return response(() async {
-      return await offerRemoteDataSource.getOfferById(idUser: idUser, idService:idService);
+  Future<Either<Failure, OfferEntities>> getOfferById(
+      {required String idUser, required String idService}) {
+    return response(() async {
+      return await offerRemoteDataSource.getOfferById(
+          idUser: idUser, idService: idService);
+    });
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateOffer(
+      {required String idOffer, required Map<String, dynamic> data}) async {
+    return response(() async {
+      return await offerRemoteDataSource.updateOffer(
+          idOffer: idOffer, data: data);
     });
   }
 }

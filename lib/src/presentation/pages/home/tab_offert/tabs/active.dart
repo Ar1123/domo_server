@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import '../../../../../../injector.dart';
 
 class ActivePage extends StatelessWidget {
-   ActivePage({ Key? key }) : super(key: key);
+  ActivePage({Key? key}) : super(key: key);
   final serviceBloc = locator<ServiceBloc>();
 
   @override
   Widget build(BuildContext context) {
-   final size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
     return SizedBox(
       child: FutureBuilder<List<OfferEntities>>(
         future: serviceBloc.getOffer(status: Status.active),
@@ -39,14 +39,19 @@ class ActivePage extends StatelessWidget {
     );
   }
 
-  Widget _container(
-          {required Size size,
-          required OfferEntities serviceEntities,
-          required BuildContext context}) =>
+  Widget _container({
+    required Size size,
+    required OfferEntities serviceEntities,
+    required BuildContext context,
+  }) =>
       GestureDetector(
         onTap: () {
-          // Navigator.pushNamed(context, "detailService",
-          //     arguments: {"service": serviceEntities});
+          Navigator.pushNamed(context, "detailService", arguments: {
+            "service": serviceEntities.service,
+            "enabled": true,
+            "idOffer":serviceEntities.idOffer,
+            "progress":serviceEntities.progress
+          });
         },
         child: Container(
           height: size.height * .2,
@@ -54,7 +59,7 @@ class ActivePage extends StatelessWidget {
           margin: EdgeInsets.symmetric(
               horizontal: size.width * .05, vertical: size.height * .03),
           decoration: BoxDecoration(
-              color: backGroundColor,
+              color: blueColorTwo,
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(

@@ -13,5 +13,6 @@ class OfferUseCase {
 
   Future<Either<Failure, bool>> createOffer({required Map<String, dynamic> data, required String id})=>offerRepositoryDomain.createOffer(data: data, id: id);
   Future<Either<Failure, List<OfferEntities>>> getAllOfferById({ required String id})=>offerRepositoryDomain.getAllOfferById(id: id);
-  Future<Either<Failure, OfferEntities>> getOfferById({ required String idUser, required idService})=>offerRepositoryDomain.getOfferById(idUser: idUser, idService:idService );
+  Future<Either<Failure, OfferEntities>> getOfferById({ required String idUser, required String idService})=>offerRepositoryDomain.getOfferById(idUser: idUser, idService:idService );
+  Future<Either<Failure, bool>> updateOffer({ required String idOffer, required  Map<String, dynamic>data})=>offerRepositoryDomain.updateOffer(idOffer: idOffer, data: data);
 }

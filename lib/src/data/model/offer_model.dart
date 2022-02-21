@@ -12,13 +12,14 @@ OfferModel offerModelFromJson(String str) =>
 String offerModelToJson(OfferModel data) => json.encode(data.toJson());
 
 class OfferModel extends OfferEntities {
-  OfferModel({
+  const OfferModel({
     String? owner,
     bool? acept,
     Service? service,
     String? price,
     String? idOffer,
     String? client,
+    int? progress,
     bool? status,
   }) : super(
           acept: acept,
@@ -28,12 +29,14 @@ class OfferModel extends OfferEntities {
           service: service,
           idOffer: idOffer,
           status: status,
+          progress: progress,
         );
 
   factory OfferModel.fromJson(Map<String, dynamic> json) => OfferModel(
         owner: json["owner"],
         acept: json["acept"],
         idOffer: json["idOffer"],
+        progress: json["progress"],
         service: Service.fromJson(json["service"]),
         price: json["price"],
         client: json["client"],
@@ -48,6 +51,7 @@ class OfferModel extends OfferEntities {
         "client": client,
         "status": status,
         "idOffer": idOffer,
+        "progress": progress,
       };
 }
 

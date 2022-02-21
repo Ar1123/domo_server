@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:domo_server/injector.dart';
@@ -10,16 +11,33 @@ import 'package:flutter/services.dart';
 import '../../../../config/style/style.dart';
 import '../../../../core/constant/asset_images.dart';
 import '../../../../data/model/service_model.dart';
-import '../../../../domain/entities/service_entities.dart';
 import '../../../widgets/widgets.dart';
 
 // ignore: must_be_immutable
-class DetailService extends StatelessWidget {
+class DetailService extends StatefulWidget {
   DetailService({Key? key}) : super(key: key);
+
+  @override
+  State<DetailService> createState() => _DetailServiceState();
+}
+
+class _DetailServiceState extends State<DetailService> {
   ServiceModel? serviceEntities;
+
   final TextEditingController _priceController = TextEditingController();
 
   final serviceBloc = locator<ServiceBloc>();
+
+  bool offer = false;
+
+  bool enabled = false;
+
+  String idOffer = "";
+
+  String price = "";
+
+  int progress = 0;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -29,6 +47,19 @@ class DetailService extends StatelessWidget {
       final decodeData = jsonDecode(encodeData);
       serviceEntities =
           ServiceModel.fromJson(decodeData['service'] as Map<String, dynamic>);
+      if (decodeData['offer'] != null) {
+        offer = decodeData['offer'];
+        price = decodeData['price'];
+      }
+      if (decodeData['idOffer'] != null) {
+        idOffer = decodeData['idOffer'];
+      }
+      if (decodeData['progress'] != null) {
+        progress = decodeData['progress'];
+      }
+      if (decodeData['enabled'] != null) {
+        enabled = decodeData['enabled'];
+      }
     }
     return SafeArea(
       child: Scaffold(
@@ -40,22 +71,143 @@ class DetailService extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            _modal(size: size, context: context);
-          },
-          backgroundColor: colorText,
-          child: Icon(
-            Icons.attach_money,
-            color: whiteColor,
-          ),
-        ),
+        floatingActionButton: (offer)
+            ? FloatingActionButton(
+                backgroundColor: colorText,
+                onPressed: () {
+                  _modalEdit(size: size, context: context);
+                },
+                child: Icon(
+                  Icons.edit,
+                  color: whiteColor,
+                ),
+              )
+            : (enabled)
+                ? (progress == 0)
+                    ? GestureDetector(
+                        onTap: () async {
+                          final result = await serviceBloc.updateOffer(
+                              idOffer: idOffer,
+                              progrees: true,
+                              data: {
+                                "progress": 1,
+                                "service": serviceEntities!.toJson(),
+                              },
+                              type: Type.editPrice);
+                          if (result) {
+                            progress == 1;
+                            setState(() {});
+                          }
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: colorText,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: colorText,
+                                    offset: const Offset(0, 2),
+                                    blurRadius: 2)
+                              ]),
+                          height: size.height * .06,
+                          width: size.width * .3,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Iniciar servicio',
+                            style: textStyle(
+                              color: whiteColor,
+                              size: size.height * .02,
+                            ),
+                          ),
+                        ),
+                      )
+                    : (progress == 1)
+                        ? GestureDetector(
+                            onTap: () async {
+                              final result = await serviceBloc.updateOffer(
+                                  idOffer: idOffer,
+                                  data: {
+                                    "progress": 2,
+                                    "service": serviceEntities!.toJson(),
+                                  },
+                                  type: Type.editPrice);
+                              if (result) {
+                                setState(() {});
+                              }
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: colorText,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: colorText,
+                                        offset: const Offset(0, 2),
+                                        blurRadius: 2)
+                                  ]),
+                              height: size.height * .06,
+                              width: size.width * .3,
+                              alignment: Alignment.center,
+                              child: Text(
+                                'Finalizar servicio',
+                                style: textStyle(
+                                  color: whiteColor,
+                                  size: size.height * .02,
+                                ),
+                              ),
+                            ),
+                          )
+                        : FloatingActionButton(
+                            backgroundColor: colorText,
+                            onPressed: () {},
+                            child: Icon(
+                              Icons.check,
+                              color: whiteColor,
+                            ),
+                          )
+                : FloatingActionButton(
+                    onPressed: () {
+                      _modal(size: size, context: context, isEdit: false);
+                    },
+                    backgroundColor: colorText,
+                    child: Icon(
+                      Icons.attach_money,
+                      color: whiteColor,
+                    ),
+                  ),
         body: SingleChildScrollView(
           child: Column(
             children: [
+              (offer)
+                  ? Container(
+                      width: size.width,
+                      alignment: Alignment.centerRight,
+                      child: Container(
+                        width: size.width * .3,
+                        decoration: BoxDecoration(
+                            color: colorText,
+                            borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(10))),
+                        child: Column(
+                          children: [
+                            Text(
+                              'Ofertaste',
+                              style: textStyle(
+                                  color: whiteColor, size: size.height * .023),
+                            ),
+                            Text(
+                              price,
+                              style: textStyle(
+                                  color: whiteColor, size: size.height * .023),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
               Container(
                 margin: EdgeInsets.only(
-                  top: size.height * .05,
+                  top: (offer) ? size.height * .02 : size.height * .05,
                 ),
                 alignment: Alignment.center,
                 child: Text(
@@ -101,10 +253,14 @@ class DetailService extends StatelessWidget {
                 ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: (serviceEntities!.imagesevice!.length > 1)
+                    ? MainAxisAlignment.spaceAround
+                    : MainAxisAlignment.center,
                 children: [
                   _card(img: serviceEntities!.imagesevice![0], size: size),
-                  _card(img: serviceEntities!.imagesevice![1], size: size),
+                  (serviceEntities!.imagesevice!.length > 1)
+                      ? _card(img: serviceEntities!.imagesevice![1], size: size)
+                      : SizedBox(),
                 ],
               )
             ],
@@ -144,6 +300,7 @@ class DetailService extends StatelessWidget {
           ],
         ),
       );
+
   Widget _title({required Size size, required String text}) => Container(
         alignment: Alignment.centerLeft,
         margin: EdgeInsets.only(left: size.width * .1, top: size.height * .04),
@@ -196,7 +353,10 @@ class DetailService extends StatelessWidget {
         ),
       );
 
-  void _modal({required Size size, required BuildContext context}) =>
+  void _modal(
+          {required Size size,
+          required BuildContext context,
+          required bool isEdit}) =>
       customShowModalBottonSheet(
           context: context,
           child: SizedBox(
@@ -226,15 +386,76 @@ class DetailService extends StatelessWidget {
                   backGroundColor: colorText,
                   borderColor: colorText,
                   textColor: whiteColor,
-                  text: "Enviar oferta",
+                  text: (isEdit) ? "Editar oferta" : "Enviar oferta",
                   action: () async {
                     if (_priceController.text.isNotEmpty) {
-                      await serviceBloc.createOffer(data: {
-                        "service": serviceEntities!.toJson(),
-                        "price": _priceController.text.trim(),
-                      });
+                      if (isEdit) {
+                        await serviceBloc.updateOffer(
+                            idOffer: idOffer,
+                            data: {
+                              "service": serviceEntities!.toJson(),
+                              "price": _priceController.text.trim(),
+                            },
+                            type: Type.editPrice);
+                      } else {
+                        final result = await serviceBloc.createOffer(data: {
+                          "service": serviceEntities!.toJson(),
+                          "price": _priceController.text.trim(),
+                          "progress": 0
+                        });
+                        if (result) {
+                          Navigator.pop(context);
+                        }
+                      }
                       Navigator.pop(context);
                     }
+                  },
+                ),
+              ],
+            ),
+          ),
+          header: SizedBox(
+            height: size.height * .02,
+          ));
+
+  void _modalEdit({required Size size, required BuildContext context}) =>
+      customShowModalBottonSheet(
+          context: context,
+          child: SizedBox(
+            height: size.height * .2,
+            child: Column(
+              children: [
+                ListTile(
+                  leading: Icon(
+                    Icons.attach_money,
+                    color: colorText,
+                  ),
+                  title: Text(
+                    'Editar oferta',
+                    style: textStyle(
+                      color: colorText,
+                      size: size.height * .02,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _modal(size: size, context: context, isEdit: true);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.delete_outline,
+                    color: colorText,
+                  ),
+                  title: Text(
+                    'Eliminar oferta',
+                    style: textStyle(
+                      color: colorText,
+                      size: size.height * .02,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
                   },
                 ),
               ],

@@ -1,10 +1,9 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:domo_server/src/core/errors/execptions.dart';
-import 'package:domo_server/src/core/utils/upload_image.dart';
-import 'package:domo_server/src/data/model/service_model.dart';
-import 'package:image_picker/image_picker.dart';
+
+import '../../../core/errors/execptions.dart';
+import '../../model/service_model.dart';
 
 abstract class ServiceRemoteDataSource {
   Future<List<ServiceModel>> getServiceById(
@@ -26,7 +25,8 @@ class ServiceRemoteDataSourceImpl implements ServiceRemoteDataSource {
             "category",
             isEqualTo: data['category'],
           )
-          .where("city", isEqualTo: data['city'])
+          .where("city", isEqualTo: data['city']).
+          where("status", isEqualTo: true)
           .get();
 
       list = result.docs

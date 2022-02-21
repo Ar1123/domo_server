@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:domo_server/injector.dart';
 import 'package:domo_server/src/domain/usecase/use_case_domain.dart';
+import 'package:domo_server/src/presentation/widgets/custom_widget/custom_snackbar.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 
@@ -104,6 +105,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   static Future<void> _onbackground(RemoteMessage message) async {
     //Cuando la app esta abierta
     _streamController.add(message.notification?.title ?? 'no titulo');
+
     log("2222222222222222 ${ message.notification!.body}");
 
   }
