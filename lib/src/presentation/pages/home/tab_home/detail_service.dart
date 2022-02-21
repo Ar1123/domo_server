@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:domo_server/injector.dart';
@@ -15,7 +14,7 @@ import '../../../widgets/widgets.dart';
 
 // ignore: must_be_immutable
 class DetailService extends StatefulWidget {
-  DetailService({Key? key}) : super(key: key);
+  const DetailService({Key? key}) : super(key: key);
 
   @override
   State<DetailService> createState() => _DetailServiceState();

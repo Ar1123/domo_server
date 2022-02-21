@@ -1,16 +1,53 @@
-# domo_server
+# APLICACION PARA EL USUARIO SERVIDOR (quien oferta a los servicios publicados)
 
-A new Flutter project.
+# Andrés Ruiz  - Luis Renteria
 
-## Getting Started
+# INICIO DEL PROYECTO 
+# Proyecto desarrolado en el framework Flutter y el lenguaje Dart
+ * Version de flutter: 2.8.1 
+ * Version de dart: 2.14.4
+ - En caso de tener una versión distinta, configure Flutter version Manager (FVM) https://fvm.app/
 
-This project is a starting point for a Flutter application.
+# Arquitectura usuada : Clean Architecture
 
-A few resources to get you started if this is your first Flutter project:
+    |-lib
+      |--src
+         |--config/   
+         |--core/   
+         |--data
+            |--local/
+            |--repository/
+            |--model/
+         |--domain
+            |--entities/
+            |--repository/       
+            |--usecase/
+         |--presentation
+            |--widgets/
+            |--pages/
+                |--authentication/
+                |--complete_account/
+                |--home
+                    |--profile/
+                    |--service_detail/
+                    |--list_service/
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+# Paqueteria usada https://pub.dev/
+- dartz:
+# Localizador de dependencias
+- get_it:
+# para comparar las variables (por tipado)
+- equatable
+# Gestor de estados
+- flutter_bloc:
+# Imagenes locales (camara o galeria)
+- image_picker:
+# Almacenamiento local (cahe)
+- shared_preferences:
+# Conexión con la Api de firebase
+- firebase_auth:
+- cloud_firestore:
+- firebase_storage:
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Input con formador de pin para codigos
+- pin_code_fields
